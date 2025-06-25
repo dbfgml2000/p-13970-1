@@ -22,7 +22,7 @@ public class ApiV1PostController {
 
         return items
                 .stream()
-                .map(PostDto::new)
+                .map(PostDto::new) //람다식: post -> new PostDto(post)
                 .toList();
     }
 
