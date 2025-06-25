@@ -22,7 +22,7 @@ public class ApiV1PostController {
         return items;
     }
 
-    @GetMapping
+    @GetMapping("{id}")
     public Post getItem(int id) {
         Post post = postService.findById(id).get();
 
