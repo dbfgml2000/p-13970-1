@@ -4,7 +4,7 @@ import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
 import com.back.domain.post.postComment.dto.PostCommentDto;
 import com.back.domain.post.postComment.entity.PostComment;
-import com.back.global.RsData;
+import com.back.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +53,7 @@ public class ApiV1PostCommentController {
             @PathVariable int postId,
             @PathVariable int id
     ) {
-        Post post = postService.findById(id).get();
+        Post post = postService.findById(postId).get();
 
         PostComment postComment = post.findCommentById(id).get();
 
@@ -61,7 +61,8 @@ public class ApiV1PostCommentController {
 
         return new RsData(
                 "200-1",
-                "댓글이 삭제되었습니다."
+                "%d번 댓글이 삭제되었습니다.".formatted(id),
+                new PostCommentDto(postComment)
         );
     }
 
