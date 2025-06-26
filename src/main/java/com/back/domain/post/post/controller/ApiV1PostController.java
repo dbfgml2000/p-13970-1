@@ -74,7 +74,7 @@ public class ApiV1PostController {
         Post post = postService.write(form.title, form.content);
 
         return new RsData<>(
-                "200-1",
+                "201-1",
                 "게시글이 작성되었습니다.",
                 new PostWriteResBody(
                         postService.count(),
