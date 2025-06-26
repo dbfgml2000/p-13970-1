@@ -63,4 +63,27 @@ public class ApiV1PostCommentController {
         );
     }
 
+    /*
+    record PostCommentWriteForm(
+            String content
+    ) {}
+
+    @PostMapping
+    @Transactional
+    public RsData<PostCommentDto> write(
+            @PathVariable int postId,
+            @RequestBody PostCommentWriteForm form
+    ) {
+        Post post = postService.findById(postId).get();
+
+        postService.writeComment(post, form.content);
+
+        return new RsData<>(
+                "200-2",
+                "댓글이 작성되었습니다.",
+                new PostCommentDto(post.getComments().get(post.getComments().size() - 1)) // 가장 최근 댓글 반환
+        );
+    }
+     */
+
 }
