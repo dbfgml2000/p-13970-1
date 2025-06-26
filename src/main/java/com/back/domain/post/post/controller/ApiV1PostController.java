@@ -4,6 +4,7 @@ import com.back.domain.post.post.dto.PostDto;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
 import com.back.global.rsData.RsData;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -54,28 +54,32 @@ public class ApiV1PostController {
 
     record PostWriteRqBody(
             @NotBlank
-            @Size(min=2, max=100)
+            @Size(min = 2, max = 100)
             String title,
             @NotBlank
-            @Size(min=2, max=5000)
+            @Size(min = 2, max = 5000)
             String content
-    ) {}
+    ) {
+    }
+
+    record PostWriteResBody(
+            long totalCount,
+            PostDto post
+    ) {
+    }
 
     @PostMapping
     @Transactional
-    public RsData<Map> write(@RequestBody PostWriteRqBody form) {
+    public RsData<PostWriteResBody> write(@Valid @RequestBody PostWriteRqBody form) {
         Post post = postService.write(form.title, form.content);
 
-        long totalCount = postService.count();
-
-        Map<String, Object> data = Map.of(
-                "totalCount", totalCount,
-                "post", new PostDto(post));
-
         return new RsData<>(
-                "200-2",
-                "%d번 게시글이 작성되었습니다.".formatted(post.getId()),
-                data
+                "200-1",
+                "게시글이 작성되었습니다.",
+                new PostWriteResBody(
+                        postService.count(),
+                        new PostDto(post)
+                )
         );
     }
 }
