@@ -101,9 +101,11 @@ class ApiV1PostControllerTest {
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
-                .andExpect(handler().methodName("modify"))
+                .andExpect(handler().methodName("delete"))
                 .andExpect(status().isOk()) // 200 OK
                 .andExpect(jsonPath("$.resultCode").value("200-1"))
-                .andExpect(jsonPath("msg").value("%d번 글이 삭제되었습니다.".formatted(id)));
+                .andExpect(jsonPath("msg").value("%d번 게시글이 삭제되었습니다.".formatted(id)));
     }
+
+
 }
