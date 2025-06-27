@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
 }
 
 /*
+// 이 코드는 @ControllerAdvice를 사용하여 전역 예외 처리기를 정의합니다.
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
@@ -45,6 +46,7 @@ public class GlobalExceptionHandler {
  */
 
 /*
+// 이 코드는 @RestControllerAdvice를 사용하여 전역 예외 처리기를 정의합니다.
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
