@@ -33,9 +33,7 @@ public class ApiV1PostController {
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
     public PostDto getItem(@PathVariable int id) {
-        Post post = postService.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("%d번 게시글이 존재하지 않습니다.".formatted(id))
-        );
+        Post post = postService.findById(id).get();
 
         return new PostDto(post);
     }

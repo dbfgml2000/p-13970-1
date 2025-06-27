@@ -149,7 +149,7 @@ class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 단건 조회, 404")
     void t6() throws Exception {
-        int id = 0;
+        int id = Integer.MAX_VALUE;
 
         ResultActions resultActions = mvc
                 .perform(
@@ -159,7 +159,7 @@ class ApiV1PostControllerTest {
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("getItem"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isNotFound());
     }
 
     @Test
