@@ -159,7 +159,7 @@ class ApiV1PostControllerTest {
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("getItem"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().is5xxServerError());
     }
 
     @Test
@@ -170,17 +170,19 @@ class ApiV1PostControllerTest {
                         get("/api/v1/posts")
                 ).andDo(print());
 
+        List<Post> posts = postService.findAll();
+
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("getItems"))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(posts.size()));
 
-        List<Post> posts = postService.findAll();
-
+        /*
         // posts.size()번째 인덱스가 존재하지 않는지 확인
         resultActions
                 .andExpect(jsonPath("$[%d]".formatted(posts.size())).doesNotExist());
-        /*
+
         // 아래와 같이 전체가 배열인지, 비어있지 않은지, 크기가 posts.size()인지 확인할 수도 있음
         resultActions
                 .andExpect(jsonPath("$").isArray())
