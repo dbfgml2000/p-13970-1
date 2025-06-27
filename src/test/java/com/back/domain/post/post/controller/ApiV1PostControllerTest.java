@@ -45,12 +45,14 @@ class ApiV1PostControllerTest {
 
         Post post = postService.findLatest().get();
         long totalCount = postService.count();
+
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("write"))
                 .andExpect(status().isCreated()) // 201 Created
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
-                .andExpect(jsonPath("$.msg").value("%d번 글이 작성되었습니다.".formatted(post.getId())))
+                .andExpect(jsonPath("$.msg").value(totalCount))
+                .andExpect(jsonPath("$.data.totalCount").value(post.getId()))
                 .andExpect(jsonPath("$.data.post.id").value(post.getId()));
     }
 
