@@ -76,13 +76,15 @@ class ApiV1PostControllerTest {
                                         """)
                 ).andDo(print());
 
-        Post post = postService.findById(id).get();
-
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("modify"))
                 .andExpect(status().isOk()) // 200 OK
                 .andExpect(jsonPath("$.resultCode").value("200-1"))
-                .andExpect(jsonPath("msg").value("%d번 글이 수정되었습니다.".formatted(post.getId())));
+                .andExpect(jsonPath("msg").value("%d번 글이 수정되었습니다.".formatted(id)));
     }
+
+    // 컨트롤러 테스트는 컨트롤러가 응답한 결과를 검증하는 것이므로,
+    // 아래와 같이 수정한 post를 불러와 assertThat으로 검증하는 것은 선택
+    // Post post = postService.findById(id).get();
 }
