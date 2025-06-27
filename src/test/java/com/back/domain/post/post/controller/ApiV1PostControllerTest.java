@@ -147,6 +147,22 @@ class ApiV1PostControllerTest {
     }
 
     @Test
+    @DisplayName("글 단건 조회, 404")
+    void t6() throws Exception {
+        int id = 0;
+
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/" + id)
+                ).andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItem"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     @DisplayName("글 다건 조회")
     void t5() throws Exception {
                 ResultActions resultActions = mvc
@@ -160,6 +176,17 @@ class ApiV1PostControllerTest {
                 .andExpect(status().isOk());
 
         List<Post> posts = postService.findAll();
+
+        // posts.size()번째 인덱스가 존재하지 않는지 확인
+        resultActions
+                .andExpect(jsonPath("$[%d]".formatted(posts.size())).doesNotExist());
+        /*
+        // 아래와 같이 전체가 배열인지, 비어있지 않은지, 크기가 posts.size()인지 확인할 수도 있음
+        resultActions
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$", Matchers.hasSize(posts.size())));
+         */
 
         for(int i=0; i<posts.size(); i++) {
             Post post = posts.get(i);
