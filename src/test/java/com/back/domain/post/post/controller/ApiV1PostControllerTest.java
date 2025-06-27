@@ -85,6 +85,7 @@ class ApiV1PostControllerTest {
     }
 
     // 컨트롤러 테스트는 컨트롤러가 응답한 결과를 검증하는 것이므로,
-    // 아래와 같이 수정한 post를 불러와 assertThat으로 검증하는 것은 선택
+    // 아래와 같이 수정한 post를 불러와 assertThat으로
+    // 서비스 로직이 담당하는 부분까지 검증하는 것은 선택
     // Post post = postService.findById(id).get();
 }
