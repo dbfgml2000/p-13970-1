@@ -63,8 +63,6 @@ class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 쓰기, without title")
     void t7() throws Exception {
-        int id = Integer.MAX_VALUE;
-
         ResultActions resultActions = mvc
                 .perform(
                         post("/api/v1/posts")
@@ -91,8 +89,6 @@ class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 쓰기, without content")
     void t8() throws Exception {
-        int id = Integer.MAX_VALUE;
-
         ResultActions resultActions = mvc
                 .perform(
                         post("/api/v1/posts")
@@ -114,6 +110,30 @@ class ApiV1PostControllerTest {
                         content-NotBlank-must not be blank
                         content-Size-size must be between 2 and 5000
                         """.stripIndent().trim()));
+    }
+
+    @Test
+    @DisplayName("글 쓰기, with wrong json syntax")
+    void t9() throws Exception {
+        String wrongJsonBody = """
+                {
+                    "title": "제목",
+                    content": "내용"
+                """;
+
+        ResultActions resultActions = mvc
+                .perform(
+                        post("/api/v1/posts")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(wrongJsonBody)
+                ).andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("write"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.resultCode").value("400-1"))
+                .andExpect(jsonPath("msg").value("요청 본문이 올바르지 않습니다.".stripIndent().trim()));
     }
 
     @Test
@@ -221,7 +241,7 @@ class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 다건 조회")
     void t5() throws Exception {
-                ResultActions resultActions = mvc
+        ResultActions resultActions = mvc
                 .perform(
                         get("/api/v1/posts")
                 ).andDo(print());
@@ -246,7 +266,7 @@ class ApiV1PostControllerTest {
                 .andExpect(jsonPath("$", Matchers.hasSize(posts.size())));
          */
 
-        for(int i=0; i<posts.size(); i++) {
+        for (int i = 0; i < posts.size(); i++) {
             Post post = posts.get(i);
             resultActions
                     .andExpect(jsonPath("$[%d].id".formatted(i)).value(post.getId()))
