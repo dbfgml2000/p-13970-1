@@ -45,14 +45,13 @@ class ApiV1PostControllerTest {
                 ).andDo(print());
 
         Post post = postService.findLatest().get();
-        long totalCount = postService.count();
 
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("write"))
                 .andExpect(status().isCreated()) // 201 Created
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
-                .andExpect(jsonPath("msg").value("%d번 게시글이 작성되었습니다.".formatted(post.getId())))
+                .andExpect(jsonPath("msg").value("%d번 글이 작성되었습니다.".formatted(post.getId())))
                 .andExpect(jsonPath("$.data.id").value(post.getId()))
                 .andExpect(jsonPath("$.data.createdDate").value(Matchers.startsWith(post.getCreateDate().toString().substring(0, 20))))
                 .andExpect(jsonPath("$.data.modifiedDate").value(Matchers.startsWith(post.getModifyDate().toString().substring(0, 20))))
@@ -63,9 +62,11 @@ class ApiV1PostControllerTest {
     @Test
     @DisplayName("글 수정")
     void t2() throws Exception {
+        int id = 1;
+
         ResultActions resultActions = mvc
                 .perform(
-                        put("/api/v1/posts/1")
+                        put("/api/v1/posts/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -75,9 +76,13 @@ class ApiV1PostControllerTest {
                                         """)
                 ).andDo(print());
 
+        Post post = postService.findById(id).get();
+
         resultActions
                 .andExpect(handler().handlerType(ApiV1PostController.class))
                 .andExpect(handler().methodName("modify"))
-                .andExpect(status().isOk()); // 200 OK
+                .andExpect(status().isOk()) // 200 OK
+                .andExpect(jsonPath("$.resultCode").value("200-1"))
+                .andExpect(jsonPath("msg").value("%d번 글이 수정되었습니다.".formatted(post.getId())));
     }
 }
