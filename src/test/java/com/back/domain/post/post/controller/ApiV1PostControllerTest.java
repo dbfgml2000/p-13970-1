@@ -52,7 +52,7 @@ class ApiV1PostControllerTest {
                 .andExpect(handler().methodName("write"))
                 .andExpect(status().isCreated()) // 201 Created
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
-                .andExpect(jsonPath("$.data.totalCount").value(totalCount))
+                .andExpect(jsonPath("msg").value("%d번 게시글이 작성되었습니다.".formatted(post.getId())))
                 .andExpect(jsonPath("$.data.id").value(post.getId()))
                 .andExpect(jsonPath("$.data.createdDate").value(Matchers.startsWith(post.getCreateDate().toString().substring(0, 20))))
                 .andExpect(jsonPath("$.data.modifiedDate").value(Matchers.startsWith(post.getModifyDate().toString().substring(0, 20))))
