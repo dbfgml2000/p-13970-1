@@ -90,7 +90,4 @@ public class ApiV1PostCommentController {
                 "%d번 댓글이 수정되었습니다.".formatted(id)
         );
     }
-
-
-
 }
