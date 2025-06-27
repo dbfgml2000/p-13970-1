@@ -107,5 +107,56 @@ class ApiV1PostControllerTest {
                 .andExpect(jsonPath("msg").value("%d번 게시글이 삭제되었습니다.".formatted(id)));
     }
 
+    @Test
+    @DisplayName("글 단건 조회")
+    void t4() throws Exception {
+        int id = 1;
 
+        ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts/" + id)
+                ).andDo(print());
+
+        Post post = postService.findById(id).get();
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItem"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(post.getId()))
+                .andExpect(jsonPath("$.createdDate").value(Matchers.startsWith(post.getCreateDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.modifiedDate").value(Matchers.startsWith(post.getModifyDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.title").value(post.getTitle()))
+                .andExpect(jsonPath("$.content").value(post.getContent()));
+
+        /*
+        // 이렇게 각 JSON 필드에 올바른 형식의 데이터가 들어있는지만 체크해도 OK
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItem"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.createdDate").isString())
+                .andExpect(jsonPath("$.modifiedDate").isString())
+                .andExpect(jsonPath("$.content").isString())
+                .andExpect(jsonPath("$.title").isString());
+         */
+
+    }
+
+    @Test
+    @DisplayName("글 다건 조회")
+    void t5() throws Exception {
+                ResultActions resultActions = mvc
+                .perform(
+                        get("/api/v1/posts")
+                ).andDo(print());
+
+        resultActions
+                .andExpect(handler().handlerType(ApiV1PostController.class))
+                .andExpect(handler().methodName("getItems"))
+                .andExpect(status().isOk());
+
+
+    }
 }
