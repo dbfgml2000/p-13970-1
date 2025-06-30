@@ -160,8 +160,8 @@ class ApiV1PostCommentControllerTest {
                 .andExpect(jsonPath("$.resultCode").value("201-1"))
                 .andExpect(jsonPath("$.msg").value("%d번 댓글이 작성되었습니다.".formatted(postComment.getId())))
                 .andExpect(jsonPath("$.data.id").value(postComment.getId()))
-                .andExpect(jsonPath("$.data.createDate").value(Matchers.startsWith(postComment.getCreateDate().toString().substring(0, 20))))
-                .andExpect(jsonPath("$.data.modifyDate").value(Matchers.startsWith(postComment.getModifyDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.data.createdDate").value(Matchers.startsWith(postComment.getCreateDate().toString().substring(0, 20))))
+                .andExpect(jsonPath("$.data.modifiedDate").value(Matchers.startsWith(postComment.getModifyDate().toString().substring(0, 20))))
                 .andExpect(jsonPath("$.data.content").value("내용"))
         ;
     }
