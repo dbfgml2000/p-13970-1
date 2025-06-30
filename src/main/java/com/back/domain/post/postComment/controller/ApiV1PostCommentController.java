@@ -90,4 +90,22 @@ public class ApiV1PostCommentController {
                 "%d번 댓글이 수정되었습니다.".formatted(id)
         );
     }
+
+    @PostMapping
+    @Transactional
+    public RsData<PostCommentDto> write(
+            @PathVariable int postId,
+            @Valid @RequestBody PostCommentModifyReqBody reqBody
+    ) {
+        Post post = postService.findById(postId).get();
+
+        PostComment postComment = postService.writeComment(post, reqBody.content);
+
+        postService.flush(); //트랜잭션 끝난 후 수행되어야 하는 더티체킹 및 여러 작업들을 지금 당장 수행하도록 함
+
+        return new RsData<>(
+                "201-1",
+                "%d번 댓글이 수정되었습니다.".formatted(postComment.getId())
+        );
+    }
 }
