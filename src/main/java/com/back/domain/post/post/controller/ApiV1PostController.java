@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class ApiV1PostController {
     private final PostService postService;
 
-    @GetMapping
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
     @Transactional(readOnly = true)
     public List<PostDto> getItems() {
         List<Post> items = postService.findAll();
@@ -30,7 +32,7 @@ public class ApiV1PostController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     @Transactional(readOnly = true)
     public PostDto getItem(@PathVariable int id) {
         Post post = postService.findById(id).get();
